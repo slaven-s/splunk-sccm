@@ -60,8 +60,8 @@ queries run against the database. Info about the queries includes:
 _Steps below were originally provided by the Splunk-provided base application:_
 
 1. Install pre-requisities
-..* Splunk Enterprise
-..* DBConnect App
+  * Splunk Enterprise
+  * DBConnect App
 2. Login to Splunk
 3. Click on Settings->Access Controls->Users
 4. Grant your logged in use the DBX Role to your account
