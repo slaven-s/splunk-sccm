@@ -1,5 +1,5 @@
 <dashboard>
-  <label>SCCM - App Statistics</label>
+  <label>Monitoring Statistics</label>
   <description></description>
   <row>
     <panel>
@@ -7,7 +7,7 @@
         <title>Number of Events</title>
         <search>
           <query>index=sccm sourcetype=sccm* | stats count</query>
-          <earliest>-24h@h</earliest>
+          <earliest>0</earliest>
           <latest>now</latest>
         </search>
         <option name="drilldown">none</option>
@@ -22,7 +22,7 @@
         <title>Number of Events by Sourcetype</title>
         <search>
           <query>index=sccm sourcetype=sccm* | stats count by sourcetype | sort -count</query>
-          <earliest>-24h@h</earliest>
+          <earliest>0</earliest>
           <latest>now</latest>
         </search>
         <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>

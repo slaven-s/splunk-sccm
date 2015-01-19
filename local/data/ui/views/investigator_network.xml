@@ -1,5 +1,5 @@
 <form>
-  <label>SCCM - Network Information - Investigator</label>
+  <label>Network Information Investigator</label>
   <description></description>
   <fieldset submitButton="true">
     <input type="text" token="computername" searchWhenChanged="false">

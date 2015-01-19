@@ -1,5 +1,20 @@
-<nav search_view="search" color="#2E8DEF">
-  <view name="search" default='true' />
+<nav search_view="search" color="#002050">
+  <view name="sccm" default="true" />
+
+  <collection label="Overview">
+    <view source="unclassified" match="overview" />
+  </collection>
+  
+  <collection label="Details">
+    <view source="unclassified" match="investigator" />
+  </collection>
+  
+  <collection label="Other Dashboards">
+    <view source="unclassified" />
+  </collection>
+    
+  
+  <view name="search" />
   <view name="data_models" />
   <view name="reports" />
   <view name="alerts" />

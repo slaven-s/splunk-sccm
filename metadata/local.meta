@@ -34,8 +34,8 @@ modtime = 1404770489.256226100
 
 [views/sccm_overview]
 owner = admin
-version = 6.1.2
-modtime = 1406160113.231385200
+version = 6.2.1
+modtime = 1421650396.657711000
 
 [views/sccm__network_information]
 owner = admin
@@ -104,8 +104,8 @@ version = 6.2.0
 modtime = 1416107787.365729000
 
 [nav/default]
-version = 6.1.2
-modtime = 1406219812.601841600
+version = 6.2.1
+modtime = 1421652452.576613000
 
 [views/cert]
 owner = admin

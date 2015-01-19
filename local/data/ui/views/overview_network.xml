@@ -1,5 +1,5 @@
 <dashboard>
-  <label>SCCM - Network Information - Overview</label>
+  <label>Network Information Overview</label>
   <row>
     <panel>
       <chart>

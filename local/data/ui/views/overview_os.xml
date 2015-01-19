@@ -1,5 +1,5 @@
 <dashboard>
-  <label>SCCM - Operating System - Overview</label>
+  <label>Operating System Overview</label>
   <row>
     <panel>
       <chart>

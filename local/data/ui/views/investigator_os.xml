@@ -1,5 +1,5 @@
 <form>
-  <label>SCCM - Operating System - Investigator</label>
+  <label>Operating System Investigator</label>
   <description></description>
   <fieldset submitButton="true">
     <input type="text" token="computername">

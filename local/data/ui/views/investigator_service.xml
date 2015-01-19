@@ -1,5 +1,5 @@
 <form>
-  <label>SCCM - Services - Investigator</label>
+  <label>Service Investigator</label>
   <description/>
   <fieldset submitButton="true">
     <input type="text" token="computername">
