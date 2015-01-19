@@ -1,0 +1,192 @@
+[app/ui]
+version = 6.1.2
+modtime = 1404749750.507604800
+
+[app/launcher]
+version = 6.1.2
+modtime = 1404749750.507604800
+
+[indexes/sccm]
+owner = admin
+version = 6.1.2
+modtime = 1404760225.511024100
+
+[lookups/sccmcomputerinformation.csv]
+access = read : [ * ], write : [ admin, power ]
+export = none
+owner = nobody
+version = 6.2.0
+modtime = 1415947712.454422200
+
+[transforms/sccmcomputerinformation]
+access = read : [ * ], write : [ admin ]
+export = none
+owner = admin
+version = 6.1.2
+modtime = 1404770500.987446700
+
+[props/sccm%2A/LOOKUP-machineidtocomputername]
+access = read : [ * ], write : [ admin, power ]
+export = none
+owner = admin
+version = 6.1.2
+modtime = 1404770489.256226100
+
+[views/sccm_overview]
+owner = admin
+version = 6.1.2
+modtime = 1406160113.231385200
+
+[views/sccm__network_information]
+owner = admin
+version = 6.2.0
+modtime = 1415994732.514402500
+
+[views/sccm__computer_hardware__overview]
+owner = admin
+version = 6.1.2
+modtime = 1405547384.128731700
+
+[lookups/localeidlookup.csv]
+access = read : [ * ], write : [ admin ]
+export = none
+owner = admin
+version = 6.2.0
+modtime = 1415949090.284421000
+
+[transforms/localeidlookup]
+access = read : [ * ], write : [ admin ]
+export = none
+owner = admin
+version = 6.1.2
+modtime = 1405532247.874546300
+
+[views/sccm__network_information_investigator]
+access = read : [ * ], write : [ admin ]
+export = none
+owner = admin
+version = 6.2.0
+modtime = 1416083806.461231000
+
+[views/computer_hardware_and_software_clone__test]
+access = read : [ * ], write : [ admin ]
+export = none
+owner = admin
+version = 6.2.0
+modtime = 1416107949.454947000
+
+[views/sccm__operating_system__overview]
+access = read : [ * ], write : [ admin ]
+export = none
+owner = admin
+version = 6.2.0
+modtime = 1415994198.202402800
+
+[views/sccm__processes__overview]
+access = read : [ * ], write : [ admin ]
+export = none
+owner = admin
+version = 6.2.0
+modtime = 1416164776.648107000
+
+[views/operating_system__services]
+access = read : [ * ], write : [ admin ]
+export = none
+owner = admin
+version = 6.1.2
+modtime = 1405548286.387516500
+
+[views/computer_investigator_clone__test]
+access = read : [ * ], write : [ admin ]
+export = none
+owner = admin
+version = 6.2.0
+modtime = 1416107787.365729000
+
+[nav/default]
+version = 6.1.2
+modtime = 1406219812.601841600
+
+[views/cert]
+owner = admin
+version = 6.2.0
+modtime = 1416084044.676230400
+
+[app/install/install_source_checksum]
+version = 6.2.1
+modtime = 1421116502.705799000
+
+[savedsearches/SCCM%20-%20Lookup%20Generator%20-%20Step%201]
+export = none
+owner = admin
+version = 6.2.0
+modtime = 1416004701.559393000
+
+[savedsearches/SCCM%20-%20Lookup%20Generator%20-%20Step%202]
+export = none
+owner = admin
+version = 6.2.0
+modtime = 1416012746.904514200
+
+[savedsearches/SCCM%20-%20Lookup%20Generator%20-%20Step%203]
+export = none
+owner = admin
+version = 6.2.0
+modtime = 1416004735.501393000
+
+[savedsearches/SCCM%20-%20Lookup%20Generator%20-%20Step-1]
+export = none
+owner = admin
+version = 6.2.0
+modtime = 1416102120.044666300
+
+[savedsearches/SCCM%20-%20Lookup%20Generator%20-%20Step-2]
+export = none
+owner = admin
+version = 6.2.0
+modtime = 1416102105.672666300
+
+[savedsearches/SCCM%20-%20Lookup%20Generator%20-%20Step-3]
+export = none
+owner = admin
+version = 6.2.0
+modtime = 1416102135.348666300
+
+[props/sccm-netcard/LOOKUP-machineidtocomputername]
+access = read : [ * ], write : [ admin, power ]
+export = none
+owner = nobody
+version = 6.2.1
+modtime = 1421285914.422167000
+
+[props/sccm-logicaldisk/LOOKUP-machineidtocomputername]
+access = read : [ * ], write : [ admin, power ]
+export = none
+owner = nobody
+version = 6.2.1
+modtime = 1421285919.424755000
+
+[props/sccm-computersystem/LOOKUP-machineidtocomputername]
+access = read : [ * ], write : [ admin, power ]
+export = none
+owner = nobody
+version = 6.2.1
+modtime = 1421285923.976538000
+
+[props/sccm-installedsoftware/LOOKUP-machineidtocomputername]
+access = read : [ * ], write : [ admin, power ]
+export = none
+owner = nobody
+version = 6.2.1
+modtime = 1421285923.991883000
+
+[props/sccm-cpuinfo/LOOKUP-machineidtocomputername]
+access = read : [ * ], write : [ admin, power ]
+export = none
+owner = nobody
+version = 6.2.1
+modtime = 1421286088.848909000
+
+[app/install/state]
+version = 6.2.1
+modtime = 1421647143.885450000
