@@ -105,7 +105,7 @@ modtime = 1416107787.365729000
 
 [nav/default]
 version = 6.2.1
-modtime = 1421652452.576613000
+modtime = 1421666734.870254000
 
 [views/cert]
 owner = admin
@@ -190,3 +190,41 @@ modtime = 1421286088.848909000
 [app/install/state]
 version = 6.2.1
 modtime = 1421647143.885450000
+
+[props/sccm_log_raw/EXTRACT-schedule_body]
+export = none
+owner = admin
+version = 6.2.1
+modtime = 1421663248.015512000
+
+[views/overview_log]
+owner = admin
+version = 6.2.1
+modtime = 1421666785.253479000
+
+[props/sccm_log_raw/EXTRACT-statmgr_event]
+export = none
+owner = admin
+version = 6.2.1
+modtime = 1421664254.605746000
+
+[props/sccm_log_raw/EXTRACT-query_text]
+export = none
+owner = admin
+version = 6.2.1
+modtime = 1421666006.734661000
+
+[views/log_dbqueries]
+owner = admin
+version = 6.2.1
+modtime = 1421667652.373583000
+
+[props/sccm_log_raw/EXTRACT-query_event]
+export = none
+owner = admin
+version = 6.2.1
+modtime = 1421666122.622738000
+
+[views/sccm]
+version = 6.2.1
+modtime = 1421667359.502605000

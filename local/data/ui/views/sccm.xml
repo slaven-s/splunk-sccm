@@ -32,10 +32,12 @@
   <row>
     <panel>
       <table>
-        <title>Commonly Installed Software Over Last  24 Hours - ADD SPARKLINE</title>
-        <searchString>index=sccm sourcetype=sccm-installedsoftware  |dedup Publisher00 _time| stats count by Publisher00 ProductName00 | sort -count</searchString>
-        <earliestTime>0</earliestTime>
-        <latestTime></latestTime>
+        <title>Commonly Installed Software Over Last  24 Hours</title>
+        <search>
+          <query>index=sccm sourcetype=sccm-installedsoftware  |dedup Publisher00 _time| stats count, sparkline(count) as history by Publisher00 ProductName00 | sort -count</query>
+          <earliest>0</earliest>
+          <latest></latest>
+        </search>
         <option name="wrap">true</option>
         <option name="rowNumbers">false</option>
         <option name="dataOverlayMode">none</option>
