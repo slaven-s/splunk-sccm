@@ -126,16 +126,19 @@ The sample application proposed various [enhancement ideas](http://challenges.s3
 
 Those enhancements included, but weren't limited to:
 
-* Where possible, search post-processing is used to improve dashboard and search performance. 
+* The default entry page on any app should be a good overview of the important points of the app.  We felt the existing page was lacking content, and rewrote it to include a quick summary of an important datapoint from each area within the application. These datapoints act as drilldowns into their corresponding dashboards.
+* In addition to a rewritten homepage the navigation tabs were rearranged and relabeled, providing more direct access to specific dashboards.
+* A new tab, Log Analysis, has been added into the navigational menu. The Log Analysis tab contains dashboards for logs collected from SCCM's local log directory. 
+* Brand-new "Overview" dashboards were created, providing 36 post-process-optimized dashboard panels to give a quick overview of different metric areas within SCCM. 
+* Many of the pre-existing dashboards were taking a lengthy time to load, due to lack of post-processing - which we added - but also because they were searching data from 'All Time'. To any pre-existing dashboards that remained within the application, and to all newly created dashboards, we added a Time Range Picker with a default of 7 days.  Since SCCM updates once per day, 7 days should give a good initial range of data, and the range can be modified by the user for a more historical search when needed.
+* The applicable investigator tabs were modified to include dropdowns containing the ComputerName, instead of a single text box.  Since these dashboard panels should only be displaying data for one computer at a time, this seemed appropriate.
 * Searches have all been modified to consistently rely on indexed data. Where applicable, an Automatic Lookup
 is used to further enrich fields within events. Lookups are no longer used "on the fly" via `inputlookup` commands.
-* Searches have either been rewritten to `dedup` on the proper combination of fields, or rewritten using the appropriate `stats`
-commands to ensure each record is accounted for at its correct point in time.
-* An additional use case of monitoring SCCM Logs has been integrated into the application.
+* Searches have either been rewritten to `dedup` on the proper combination of fields, or rewritten using the appropriate `stats` commands to ensure each record is accounted for at its correct point in time.
+* Some of the titles of the panels did not adequately represent their content, and some of them were not doing what they seemed to be - eg. an existing Time Range Picker was not being utilized, a field called Domain was being called in a lookup table when this field did not exist.  Several of these inconsistencies were identified and remedied.
 * Application components have been properly packaged, as per the Splunk recommendations. No `local.meta` file is included,
 and all resources reside under the `default/` app directory.
-* Time Range Pickers have been added to all dashboards, for greater control over how far back in time reports should be generated
-against.
+
 
 # License Information
 Where applicable, the modifications to this app by Rich Acosta and
