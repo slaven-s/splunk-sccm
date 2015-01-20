@@ -13,10 +13,6 @@
       <label>ComputerName</label>
       <default>*</default>
     </input>
-    <input type="text" token="username">
-      <label>UserName</label>
-      <default>*</default>
-    </input>
     <input type="text" token="macaddress">
       <label>MACAddress</label>
       <default>*</default>
@@ -26,7 +22,7 @@
     <panel>
       <table>
         <search>
-          <query>index=sccm sourcetype=sccm-netcard |lookup sccmcomputerinformation.csv MachineID as MachineID  | dedup ComputerName AdapterType00 ProductName00 ServiceName00 | fillnull value="-"| search ComputerName=$computername$ UserName00=$username$ MACAddress00=$macaddress$ |fillnull value="-"|stats list(Manufacturer00) list(AdapterType00) list(ProductName00) list(ServiceName00) list(MACAddress00) by ComputerName UserName00 title0 department0</query>
+          <query>index=sccm sourcetype=sccm-netcard |lookup sccmcomputerinformation.csv MachineID as MachineID  | dedup ComputerName AdapterType00 ProductName00 ServiceName00 | fillnull value="-"| search ComputerName=* MACAddress00=* |fillnull value="-"|stats list(Manufacturer00) as Manufacturer list(AdapterType00) as Adapter_Type list(ProductName00) as Product_Type list(ServiceName00) as Service_Name list(MACAddress00) as MAC_Address by ComputerName</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>

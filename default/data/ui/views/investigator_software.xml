@@ -11,7 +11,7 @@
     <input type="dropdown" token="computername">
       <label>ComputerName</label>
       <search>
-        <query>index=sccm sourcetype="sccm-operatingsystem" ComputerName=*| table ComputerName</query>
+        <query>index=sccm sourcetype="sccm-operatingsystem" | dedup ComputerName | table ComputerName</query>
         <earliest>-30d@d</earliest>
         <latest>now</latest>
       </search>

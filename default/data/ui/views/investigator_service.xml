@@ -9,9 +9,15 @@
         <latest>now</latest>
       </default>
     </input>
-    <input type="text" token="computername">
-      <label>ComputerName</label>
-      <default>*</default>
+    <input type="dropdown" token="computername" searchWhenChanged="false">
+      <label>Computer Name</label>
+      <search>
+        <query>index=sccm sourcetype="sccm-services" | dedup ComputerName | table ComputerName</query>
+        <earliest>-7d@h</earliest>
+        <latest>now</latest>
+      </search>
+      <fieldForLabel>ComputerName</fieldForLabel>
+      <fieldForValue>ComputerName</fieldForValue>
     </input>
   </fieldset>
   <row>

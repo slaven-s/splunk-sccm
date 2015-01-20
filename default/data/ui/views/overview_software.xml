@@ -137,4 +137,20 @@
       </table>
     </panel>
   </row>
+  <row>
+    <panel>
+      <title>Outlier Software Deployments</title>
+      <table>
+        <title>(Less than 2 deployments across the environment)</title>
+        <search base="baseSoftware">
+          <query>stats count by Publisher ProductName | where count &lt; 2</query>
+        </search>
+        <option name="wrap">true</option>
+        <option name="rowNumbers">false</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="drilldown">cell</option>
+        <option name="count">10</option>
+      </table>
+    </panel>
+  </row>
 </form>
