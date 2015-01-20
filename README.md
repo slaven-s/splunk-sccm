@@ -107,7 +107,7 @@ index = sccm
 ```
 
 
-# Closing Notes & License Information
+# Closing Notes 
 
 This application was created by Rich Acosta and Erica Feldman as an entry
 for the Splunk Apptitude contest. A sample application, `sccm.spl` was provided
@@ -119,6 +119,21 @@ on data integrity, correctness, performance, aesthetics, and grammar throughout 
 As the application was developed, many components of the original sample app were rewritten
 or completely replaced.
 
+## Enhancements
+
+The sample application proposed various [enhancement ideas](http://challenges.s3.amazonaws.com/splunk/SCCM%20-%20Sample%20App%20Install%20Instructions.pdf)
+ that were taken into consideration while developing this release.
+
+Those enhancements included, but weren't limited to:
+
+* Where possible, search post-processing is used to improve dashboard and search performance. 
+* Searches have all been modified to consistently rely on indexed data. Where applicable, an Automatic Lookup
+is used to further enrich fields within events. Lookups are no longer used "on the fly" via `inputlookup` commands.
+* Searches have either been rewritten to `dedup` on the proper combination of fields, or rewritten using the appropriate `stats`
+commands to ensure each record is accounted for at its correct point in time.
+* An additional use case of monitoring SCCM Logs has been integrated into the application.
+
+# License Information
 Where applicable, the modifications to this app by Rich Acosta and
 Erica Feldman are licensed under the MIT License. See `LICENSE` for full details.
 
