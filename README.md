@@ -3,15 +3,61 @@
 
 _- [Wikipedia: System Center Configuration Manager](https://en.wikipedia.org/wiki/System_Center_Configuration_Manager)_
 
-The Splunk App for SCCM enhances a basic SCCM app provided by Splunk by:
+The Splunk App for SCCM provides Windows System Administrators with an efficient overhead view
+of their Windows Desktop and Server environments, allowing them to easily detect new systems
+under management and spot outliers that may indicate a misconfiguration or a potential security risk.
 
-* providing a more streamlined app navigation
-* providing consistent dashboard naming
-* adding support for monitoring of SCCM's internal log files
-* providing dashboards for select SCCM logs, including detailed views for internal query performance.
-* adjusting colors and images to closer align with Microsoft's SCCM branding
-* modifying or rewriting dashboards to better represent an overhead view of the envirionment
-* utilizing search post-processing to improve dashboard search performance
+The Splunk App for SCCM includes overview dashboards for:
+* Hardware - Total CPUs, Architectures, Memory, Disks.
+* Network - Number of unique MAC Addresses, NIC types and vendors.
+* Operating System - Number of unique OS versions, builds, releases, and installation dates.
+* Software - Number of software vendors, number of packages provided by each vendor, and product versions.
+
+More detailed dashboards are alos provided for each of the above categories, allowing an administrator to
+see information specific to a particular server within the app.
+
+Dashboards for monitoring SCCM's internal logs provide an additional insight into the health and performance
+of SCCM and its related components.
+
+## Example Use Cases
+
+* Using the Oldest Running Installation view under the Operating System Overview dashboard, administrators
+can identify old systems that may be in need of a refresh.
+* Administrators can get an overhead view of how many different software vendors they install products
+from, allowing for accurate license cost prediction.
+* Automatic detection of installed packages allows for auditing and detection of unauthorized software
+installations across the environment.
+* The Hardware Overview dashboard can be used to communicate the size and scale of an enterprise's
+Windows Server footprint in terms of CPU, Memory, and Disk space.
+* The Service Investigator can be used to identify Services running on specific servers or auditing
+RunAs users for services (ex: company policy says non-Microsoft services cannot run as LocalSystem).
+* Using the Database Query Log, an administrator can identify problematic, repated, or slow queries
+being run against the SCCM database. The same log is also useful for helping an administraor discover
+relationships between tables and views within the SCCM database, which is often lacking in documentation.
+For more information on this use case, see the **Database Query Log** section below.
+
+
+## The Database Query Log
+SCCM uses an instance of Microsoft SQL Server to store the core of its configuration details. Since an
+administrator is able to delegate or give access to the SQL Server DB, a large amount of external reporting
+capabilities are opended up. However, navigating the schema and fully understanding all of the relationships
+between tables can often be difficult.
+
+Various people have had success using SCCM's SMSProv log to better understand what tables SCCM queries and
+accesses directly when performing specific tasks, in hopes of being able to "sniff" out the executed query
+and use it as a starting point for an external report.
+
+In setups where SCCM provides a mission-critical role, placing too much load on the database could result
+in poor system performance. For this purpose, the dashboard includes a "transaction" view of all
+queries run against the database. Info about the queries includes:
+
+* Table
+* Number of times the query was run (count)
+* Average run time for the query (Avg_Time)
+* Maximum run time for the query (Max_Time)
+* Total Time spent running the query over the total number of runs. (Total_Time, expressed as the calculation of: duration * count)
+
+
 
 # Requirements
 
@@ -26,36 +72,6 @@ The Splunk App for SCCM enhances a basic SCCM app provided by Splunk by:
 * An SCCM environment
 * Splunk Universal Forwarder running on the same machine as SCCM, or a way to collect logs from SCCM's installation directory
 * Knowledge of SCCM's installation directory (usually located at: `C:\Program Files\Microsoft Configuration Manager\`).
-
-# Dashboard Overview
-
-The app's navigation is broken down into four sections:
-
-* System Center (View) - An overview/entry screen into the SCCM app.
-* Config Overview (Menu) - Various dashboards displaying an overhead view of data collected from SCCM.
-* Config Details (Menu) - A more detailed set of investigative dashboards generated from data collected from SCCM.
-* SCCM Logs (Menu) - A set of dashboards displaying information gathered from SCCM's internal logging.
-
-## The Database Query Log
-SCCM uses an instance of Microsoft SQL Server to store the core of its configuration details. Since an
-administrator is able to delegate or give access to the SQL Server DB, a large amount of external reporting
-capabilities are opended up. However, navigating the schema and fully understanding all of the relationships
-between tables can often be difficult.
-
-Various people have had success using SCCM's SMSProv log to better understand what tables SCCM queries and
-accesses directly when performing specific tasks, in hopes of being able to "sniff" out the executed query
-and use it as a starting point for an external report.
-
-
-In setups where SCCM provides a mission-critical role, placing too much load on the database could result
-in poor system performance. For this purpose, the dashboard includes a "transaction" view of all
-queries run against the database. Info about the queries includes:
-
-* Table
-* Number of times the query was run (count)
-* Average run time for the query (Avg_Time)
-* Maximum run time for the query (Max_Time)
-* Total Time spent running the query over the total number of runs. (Total_Time, expressed as the calculation of: duration * count)
 
 
 # Initial Configuration
@@ -84,7 +100,6 @@ DBConnect does not recognize dmon-tail inputs from the app, so you will need to 
 2. Configure the forwarder to send events to your indexer(s).
 3. Create an `inputs.conf` entry with the stanza noted in the section below.
 
-`inputs.conf`:
 ```
 [monitor://C:\Program Files\Microsoft Configuration Manager\Logs\*.log]
 sourcetype = sccm_log_raw
@@ -92,11 +107,18 @@ index = sccm
 ```
 
 
-# License
-The foundation for this application package was created by Splunk 
-as a starting point for the Splunk Apptitude Challenge. A license 
-for this foundation was not specified.
+# Closing Notes & License Information
 
-Where specified, the modifications to this app by Rich Acosta and
+This applicaiton was created by Rich Acosta and Erica Feldman as an entry
+for the Splunk Apptitude contest. A sample application, `sccm.spl` was provided
+to contestants as part of the [contest resources](http://splunk.challengepost.com/details/resources).
+
+This application began as an improvement on top of the provided sample application, improving
+on data integreity, correctness, performance, asthetics, and grammar throughout the application.
+
+As the application was developed, most components of the original sample app were rewritten
+or completely replaced.
+
+Where applicable, the modifications to this app by Rich Acosta and
 Erica Feldman are licensed under the MIT License. See `LICENSE` for full details.
 

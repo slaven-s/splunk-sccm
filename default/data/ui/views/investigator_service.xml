@@ -18,7 +18,7 @@
     <panel>
       <table>
         <search>
-          <query>index=sccm  sourcetype="sccm-services" ComputerName=$computername$ |  dedup ComputerName DisplayName00 | table DisplayName00 Name00 PathName00 ServiceType00 StartMode00 StartName00 State00 | sort DisplayName00</query>
+          <query>index=sccm  sourcetype="sccm-services" ComputerName=$computername$ |  dedup ComputerName DisplayName00 | table DisplayName00 Name00 PathName00 ServiceType00 StartMode00 StartName00 State00 | sort DisplayName00 | rename *00 as *</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
