@@ -135,7 +135,7 @@ Those enhancements included, but weren't limited to:
 * Searches have all been modified to consistently rely on indexed data. Where applicable, an Automatic Lookup
 is used to further enrich fields within events. Lookups are no longer used "on the fly" via `inputlookup` commands.
 * Searches have either been rewritten to `dedup` on the proper combination of fields, or rewritten using the appropriate `stats` commands to ensure each record is accounted for at its correct point in time.
-* Some of the titles of the panels did not adequately represent their content, and some of them were not doing what they seemed to be - eg. an existing Time Range Picker was not being utilized, a field called Domain was being called in a lookup table when this field did not exist.  Several of these inconsistencies were identified and remedied.
+* Some of the titles of the panels did not adequately represent their content, and some of them were not doing what they seemed to be - eg. an existing Time Range Picker was not being utilized, a field called Domain was being called in a lookup table when this field did not exist, the Process Investigator tab was Software based and didn't line up with the Overview tabs.  Several of these inconsistencies were identified and remedied.
 * Application components have been properly packaged, as per the Splunk recommendations. No `local.meta` file is included,
 and all resources reside under the `default/` app directory.
 
