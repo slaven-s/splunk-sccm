@@ -134,6 +134,8 @@ commands to ensure each record is accounted for at its correct point in time.
 * An additional use case of monitoring SCCM Logs has been integrated into the application.
 * Application components have been properly packaged, as per the Splunk recommendations. No `local.meta` file is included,
 and all resources reside under the `default/` app directory.
+* Time Range Pickers have been added to all dashboards, for greater control over how far back in time reports should be generated
+against.
 
 # License Information
 Where applicable, the modifications to this app by Rich Acosta and
