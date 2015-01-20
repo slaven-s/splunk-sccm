@@ -63,13 +63,13 @@
       <chart>
         <title>Installed Software Over Time</title>
         <search>
-          <query>index=sccm sourcetype=sccm-installedsoftware ComputerName=$computername$ |dedup Publisher00| timechart count(Publisher00)</query>
+          <query>index=sccm sourcetype=sccm-installedsoftware ComputerName=$computername$ |dedup Publisher00| timechart count(Publisher00) as count</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
         <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
         <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
-        <option name="charting.axisTitleX.visibility">visible</option>
+        <option name="charting.axisTitleX.visibility">collapsed</option>
         <option name="charting.axisTitleY.visibility">visible</option>
         <option name="charting.axisTitleY2.visibility">visible</option>
         <option name="charting.axisX.scale">linear</option>
@@ -84,17 +84,17 @@
         <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
         <option name="charting.chart.stackMode">default</option>
         <option name="charting.chart.style">shiny</option>
-        <option name="charting.drilldown">all</option>
+        <option name="charting.drilldown">none</option>
         <option name="charting.layout.splitSeries">0</option>
         <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
-        <option name="charting.legend.placement">right</option>
+        <option name="charting.legend.placement">none</option>
       </chart>
     </panel>
     <panel>
       <table>
         <title>Most Recently Installed Software</title>
         <search>
-          <query>index=sccm sourcetype=sccm-installedsoftware ComputerName=$computername$ |dedup Publisher00 _time| table _time Publisher00 ProductName00</query>
+          <query>index=sccm sourcetype=sccm-installedsoftware ComputerName=$computername$ |dedup Publisher00 _time| table _time Publisher00 ProductName00 | rename *00 as *</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
@@ -129,7 +129,7 @@
       <table>
         <title>Installed Software</title>
         <search>
-          <query>index=sccm sourcetype=sccm-installedsoftware ComputerName=$computername$ | dedup Publisher00 | table Publisher00 ProductName00 ProductVersion00 InstalledLocation00 | sort Publisher00</query>
+          <query>index=sccm sourcetype=sccm-installedsoftware ComputerName=$computername$ | dedup Publisher00 | table Publisher00 ProductName00 ProductVersion00 InstalledLocation00 | sort Publisher00 | rename *00 as *</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>

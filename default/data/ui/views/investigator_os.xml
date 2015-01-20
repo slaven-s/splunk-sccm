@@ -47,18 +47,6 @@
     </panel>
     <panel>
       <single>
-        <title>Service Pack</title>
-        <search>
-          <query>index=sccm  sourcetype="sccm-operatingsystem" ComputerName=$computername$| dedup CSDVersion00 | table CSDVersion00</query>
-          <earliest>$timeRange.earliest$</earliest>
-          <latest>$timeRange.latest$</latest>
-        </search>
-        <option name="drilldown">none</option>
-        <option name="linkView">search</option>
-      </single>
-    </panel>
-    <panel>
-      <single>
         <title>Build Number</title>
         <search>
           <query>index=sccm  sourcetype="sccm-operatingsystem" ComputerName=$computername$| dedup BuildNumber00 | table BuildNumber00</query>
@@ -123,7 +111,7 @@
       <table>
         <title>Organization and User Locale</title>
         <search>
-          <query>index=sccm  sourcetype="sccm-operatingsystem" ComputerName=$computername$ | dedup ComputerName  RegisteredUser00 Locale00 OSLanguage00 | lookup localeidlookup Locale_ID as OSLanguage00 OUTPUT Language| table Organization00 RegisteredUser00 Language</query>
+          <query>index=sccm  sourcetype="sccm-operatingsystem" ComputerName=$computername$ | dedup ComputerName  RegisteredUser00 Locale00 OSLanguage00 | lookup localeidlookup Locale_ID as OSLanguage00 OUTPUT Language| table Organization00 RegisteredUser00 Language | rename *00 as *</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
@@ -156,7 +144,7 @@
       <table>
         <title>Install / Configuration Paths</title>
         <search>
-          <query>index=sccm  sourcetype="sccm-operatingsystem" ComputerName=$computername$|  dedup BootDevice00 WindowsDirectory00 SystemDirectory00 | table BootDevice00 WindowsDirectory00 SystemDirectory00</query>
+          <query>index=sccm  sourcetype="sccm-operatingsystem" ComputerName=$computername$|  dedup BootDevice00 WindowsDirectory00 SystemDirectory00 | table BootDevice00 WindowsDirectory00 SystemDirectory00  | rename *00 as *</query>
           <earliest>$timeRange.earliest$</earliest>
           <latest>$timeRange.latest$</latest>
         </search>
