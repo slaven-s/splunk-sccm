@@ -1,7 +1,14 @@
 <form>
   <label>Network Information Investigator</label>
   <description></description>
-  <fieldset submitButton="true">
+  <fieldset submitButton="true" autoRun="false">
+    <input type="time" token="timeRange" searchWhenChanged="false">
+      <label>Duration</label>
+      <default>
+        <earliest>-7d@h</earliest>
+        <latest>now</latest>
+      </default>
+    </input>
     <input type="text" token="computername" searchWhenChanged="false">
       <label>ComputerName</label>
       <default>*</default>
@@ -11,7 +18,7 @@
       <default>*</default>
     </input>
     <input type="text" token="macaddress">
-      <label>MacAddress</label>
+      <label>MACAddress</label>
       <default>*</default>
     </input>
   </fieldset>
@@ -20,8 +27,8 @@
       <table>
         <search>
           <query>index=sccm sourcetype=sccm-netcard |lookup sccmcomputerinformation.csv MachineID as MachineID  | dedup ComputerName AdapterType00 ProductName00 ServiceName00 | fillnull value="-"| search ComputerName=$computername$ UserName00=$username$ MACAddress00=$macaddress$ |fillnull value="-"|stats list(Manufacturer00) list(AdapterType00) list(ProductName00) list(ServiceName00) list(MACAddress00) by ComputerName UserName00 title0 department0</query>
-          <earliest>0</earliest>
-          <latest></latest>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
         </search>
         <option name="wrap">true</option>
         <option name="rowNumbers">false</option>

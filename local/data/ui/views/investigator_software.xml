@@ -1,8 +1,22 @@
 <form>
   <label>Software Investigator</label>
   <fieldset submitButton="true">
-    <input type="text" token="computername">
-      <label>Computer Information</label>
+    <input type="time" token="timeRange">
+      <label>Duration</label>
+      <default>
+        <earliest>-7d@h</earliest>
+        <latest>now</latest>
+      </default>
+    </input>
+    <input type="dropdown" token="computername">
+      <label>ComputerName</label>
+      <search>
+        <query>index=sccm sourcetype="sccm-operatingsystem" ComputerName=*| table ComputerName</query>
+        <earliest>-30d@d</earliest>
+        <latest>now</latest>
+      </search>
+      <fieldForLabel>ComputerName</fieldForLabel>
+      <fieldForValue>ComputerName</fieldForValue>
     </input>
   </fieldset>
   <row>
@@ -10,9 +24,9 @@
       <single>
         <title>Computer</title>
         <search>
-          <query>|inputlookup sccmcomputerinformation.csv | search ComputerName=$computername$ | table ComputerName</query>
-          <earliest>0</earliest>
-          <latest></latest>
+          <query>index=sccm sourcetype=sccm-installedsoftware ComputerName=$computername$ | table ComputerName</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
         </search>
         <option name="drilldown">none</option>
         <option name="linkView">search</option>
@@ -20,33 +34,11 @@
     </panel>
     <panel>
       <single>
-        <title>Domain</title>
+        <title>Time Zone</title>
         <search>
-          <query>|inputlookup sccmcomputerinformation.csv  | search ComputerName=$computername$ | table Domain</query>
-          <earliest>0</earliest>
-          <latest></latest>
-        </search>
-        <option name="drilldown">none</option>
-        <option name="linkView">search</option>
-      </single>
-    </panel>
-    <panel>
-      <single>
-        <title>Username</title>
-        <searchString>|inputlookup sccmcomputerinformation.csv | search ComputerName=$computername$ | table UserName</searchString>
-        <earliestTime>$earliest$</earliestTime>
-        <latestTime>$latest$</latestTime>
-        <option name="linkView">search</option>
-        <option name="drilldown">none</option>
-      </single>
-    </panel>
-    <panel>
-      <single>
-        <title>TimeZone</title>
-        <search>
-          <query>|inputlookup sccmcomputerinformation.csv | search ComputerName=$computername$ | eval TimeZone=(CurrentTimeZone00/60)|table TimeZone</query>
-          <earliest>0</earliest>
-          <latest></latest>
+          <query>index=sccm sourcetype=sccm-installedsoftware  ComputerName=$computername$ | eval TimeZone=(CurrentTimeZone00/60)|table TimeZone</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
         </search>
         <option name="drilldown">none</option>
         <option name="linkView">search</option>
@@ -57,9 +49,9 @@
       <single>
         <title>Last Update</title>
         <search>
-          <query>|inputlookup sccmcomputerinformation.csv | search ComputerName=$computername$ | convert ctime(TimeKey) as Update_Time | table Update_Time</query>
-          <earliest>0</earliest>
-          <latest></latest>
+          <query>index=sccm sourcetype=sccm-installedsoftware  ComputerName=$computername$ | convert ctime(TimeKey) as Update_Time | table Update_Time</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
         </search>
         <option name="drilldown">none</option>
         <option name="linkView">search</option>
@@ -70,17 +62,42 @@
     <panel>
       <chart>
         <title>Installed Software Over Time</title>
-        <searchString>index=sccm sourcetype=sccm-installedsoftware ComputerName=$computername$ |dedup Publisher00| timechart count(Publisher00)</searchString>
-        <earliestTime>0</earliestTime>
-        <latestTime></latestTime>
+        <search>
+          <query>index=sccm sourcetype=sccm-installedsoftware ComputerName=$computername$ |dedup Publisher00| timechart count(Publisher00)</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
+        <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
+        <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
+        <option name="charting.axisTitleX.visibility">visible</option>
+        <option name="charting.axisTitleY.visibility">visible</option>
+        <option name="charting.axisTitleY2.visibility">visible</option>
+        <option name="charting.axisX.scale">linear</option>
+        <option name="charting.axisY.scale">linear</option>
+        <option name="charting.axisY2.enabled">false</option>
+        <option name="charting.axisY2.scale">inherit</option>
+        <option name="charting.chart">column</option>
+        <option name="charting.chart.bubbleMaximumSize">50</option>
+        <option name="charting.chart.bubbleMinimumSize">10</option>
+        <option name="charting.chart.bubbleSizeBy">area</option>
+        <option name="charting.chart.nullValueMode">gaps</option>
+        <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
+        <option name="charting.chart.stackMode">default</option>
+        <option name="charting.chart.style">shiny</option>
+        <option name="charting.drilldown">all</option>
+        <option name="charting.layout.splitSeries">0</option>
+        <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
+        <option name="charting.legend.placement">right</option>
       </chart>
     </panel>
     <panel>
       <table>
         <title>Most Recently Installed Software</title>
-        <searchString>index=sccm sourcetype=sccm-installedsoftware ComputerName=$computername$ |dedup Publisher00 _time| table _time Publisher00 ProductName00</searchString>
-        <earliestTime>0</earliestTime>
-        <latestTime></latestTime>
+        <search>
+          <query>index=sccm sourcetype=sccm-installedsoftware ComputerName=$computername$ |dedup Publisher00 _time| table _time Publisher00 ProductName00</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
         <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
         <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
         <option name="charting.axisTitleX.visibility">visible</option>
@@ -111,9 +128,11 @@
     <panel>
       <table>
         <title>Installed Software</title>
-        <searchString>index=sccm sourcetype=sccm-installedsoftware ComputerName=$computername$ | dedup Publisher00 | table Publisher00 ProductName00 ProductVersion00 InstalledLocation00 | sort Publisher00</searchString>
-        <earliestTime>0</earliestTime>
-        <latestTime></latestTime>
+        <search>
+          <query>index=sccm sourcetype=sccm-installedsoftware ComputerName=$computername$ | dedup Publisher00 | table Publisher00 ProductName00 ProductVersion00 InstalledLocation00 | sort Publisher00</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
         <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
         <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
         <option name="charting.axisTitleX.visibility">visible</option>

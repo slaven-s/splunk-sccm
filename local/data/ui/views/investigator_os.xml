@@ -1,18 +1,34 @@
 <form>
   <label>Operating System Investigator</label>
   <description></description>
-  <fieldset submitButton="true">
-    <input type="text" token="computername">
+  <fieldset submitButton="true" autoRun="false">
+    <input type="time" token="timeRange" searchWhenChanged="false">
+      <label>Duration</label>
+      <default>
+        <earliest>-30d@d</earliest>
+        <latest>now</latest>
+      </default>
+    </input>
+    <input type="dropdown" token="computername">
       <label>Computer Name</label>
+      <search>
+        <query>index=sccm  sourcetype="sccm-operatingsystem" | dedup ComputerName | table ComputerName</query>
+        <earliest>-30d@d</earliest>
+        <latest>now</latest>
+      </search>
+      <fieldForLabel>ComputerName</fieldForLabel>
+      <fieldForValue>ComputerName</fieldForValue>
     </input>
   </fieldset>
   <row>
     <panel>
       <single>
         <title>Computer Name</title>
-        <searchString>index=sccm  sourcetype="sccm-operatingsystem" ComputerName=$computername$| table ComputerName</searchString>
-        <earliestTime>0</earliestTime>
-        <latestTime></latestTime>
+        <search>
+          <query>index=sccm  sourcetype="sccm-operatingsystem" ComputerName=$computername$| table ComputerName</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
         <option name="drilldown">none</option>
         <option name="linkView">search</option>
       </single>
@@ -20,9 +36,11 @@
     <panel>
       <single>
         <title>Operating System</title>
-        <searchString>index=sccm  sourcetype="sccm-operatingsystem" ComputerName=$computername$| table Caption00</searchString>
-        <earliestTime>0</earliestTime>
-        <latestTime></latestTime>
+        <search>
+          <query>index=sccm  sourcetype="sccm-operatingsystem" ComputerName=$computername$| dedup Caption00 | table Caption00</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
         <option name="drilldown">none</option>
         <option name="linkView">search</option>
       </single>
@@ -30,9 +48,11 @@
     <panel>
       <single>
         <title>Service Pack</title>
-        <searchString>index=sccm  sourcetype="sccm-operatingsystem" ComputerName=$computername$| table CSDVersion00</searchString>
-        <earliestTime>0</earliestTime>
-        <latestTime></latestTime>
+        <search>
+          <query>index=sccm  sourcetype="sccm-operatingsystem" ComputerName=$computername$| dedup CSDVersion00 | table CSDVersion00</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
         <option name="drilldown">none</option>
         <option name="linkView">search</option>
       </single>
@@ -40,9 +60,11 @@
     <panel>
       <single>
         <title>Build Number</title>
-        <searchString>index=sccm  sourcetype="sccm-operatingsystem" ComputerName=$computername$| table BuildNumber00</searchString>
-        <earliestTime>0</earliestTime>
-        <latestTime></latestTime>
+        <search>
+          <query>index=sccm  sourcetype="sccm-operatingsystem" ComputerName=$computername$| dedup BuildNumber00 | table BuildNumber00</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
         <option name="drilldown">none</option>
         <option name="linkView">search</option>
       </single>
@@ -52,9 +74,11 @@
     <panel>
       <single>
         <title>Install Date</title>
-        <searchString>index=sccm  sourcetype="sccm-operatingsystem" ComputerName=$computername$ | convert ctime(InstallDate00) ctime(LastBootUpTime00) | table  InstallDate00</searchString>
-        <earliestTime>0</earliestTime>
-        <latestTime></latestTime>
+        <search>
+          <query>index=sccm  sourcetype="sccm-operatingsystem" ComputerName=$computername$ | convert ctime(InstallDate00) | dedup InstallDate00 | table  InstallDate00</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
         <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
         <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
         <option name="charting.axisTitleX.visibility">visible</option>
@@ -84,9 +108,11 @@
     <panel>
       <single>
         <title>Last Bootup</title>
-        <searchString>index=sccm  sourcetype="sccm-operatingsystem" ComputerName=$computername$ | convert ctime(InstallDate00) ctime(LastBootUpTime00) | table   LastBootUpTime00</searchString>
-        <earliestTime>0</earliestTime>
-        <latestTime></latestTime>
+        <search>
+          <query>index=sccm  sourcetype="sccm-operatingsystem" ComputerName=$computername$ | convert ctime(LastBootUpTime00) | dedup  LastBootUpTime00 | table LastBootUpTime00</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
         <option name="drilldown">none</option>
         <option name="linkView">search</option>
       </single>
@@ -98,8 +124,8 @@
         <title>Organization and User Locale</title>
         <search>
           <query>index=sccm  sourcetype="sccm-operatingsystem" ComputerName=$computername$ | dedup ComputerName  RegisteredUser00 Locale00 OSLanguage00 | lookup localeidlookup Locale_ID as OSLanguage00 OUTPUT Language| table Organization00 RegisteredUser00 Language</query>
-          <earliest>0</earliest>
-          <latest></latest>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
         </search>
         <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
         <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
@@ -129,9 +155,11 @@
     <panel>
       <table>
         <title>Install / Configuration Paths</title>
-        <searchString>index=sccm  sourcetype="sccm-operatingsystem" ComputerName=$computername$|  dedup BootDevice00 WindowsDirectory00 SystemDirectory00 | table BootDevice00 WindowsDirectory00 SystemDirectory00</searchString>
-        <earliestTime>0</earliestTime>
-        <latestTime></latestTime>
+        <search>
+          <query>index=sccm  sourcetype="sccm-operatingsystem" ComputerName=$computername$|  dedup BootDevice00 WindowsDirectory00 SystemDirectory00 | table BootDevice00 WindowsDirectory00 SystemDirectory00</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
         <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
         <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
         <option name="charting.axisTitleX.visibility">visible</option>

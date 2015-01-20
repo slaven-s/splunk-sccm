@@ -1,13 +1,106 @@
-<dashboard>
+<form>
   <label>Hardware Overview</label>
-  <description/>
+  <description></description>
+  <fieldset submitButton="false" autoRun="true">
+    <input type="time" token="timeRange">
+      <label></label>
+      <default>
+        <earliest>-7d@h</earliest>
+        <latest>now</latest>
+      </default>
+    </input>
+  </fieldset>
+  <search id="baseComputerSystem">
+    <query>index=sccm sourcetype="sccm-computersystem" | dedup ComputerName NumberOfProcessors00 Manufacturer00 Model00 SystemType00</query>
+    <earliest>$timeRange.earliest$</earliest>
+    <latest>$timeRange.latest$</latest>
+   </search>
+  <search id="baseLogicalDisk">
+    <query>index=sccm sourcetype="sccm-logicaldisk" | dedup ComputerName Size00 Description00</query>
+    <earliest>$timeRange.earliest$</earliest>
+    <latest>$timeRange.latest$</latest>
+  </search>
+  <search id="baseOperatingSystem">
+    <query>index=sccm sourcetype="sccm-operatingsystem" | dedup ComputerName TotalVisibleMemorySize00</query>
+    <earliest>$timeRange.earliest$</earliest>
+    <latest>$timeRange.latest$</latest>
+  </search>
+
   <row>
     <panel>
+      <title>Compute, Memory, and Storage</title>
+      <single>
+        <search base="baseComputerSystem">
+          <query>stats sum(NumberOfProcessors00)</query>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="underLabel">Total CPUs</option>
+        <option name="linkView">search</option>
+      </single>
+      <single>
+        <search base="baseOperatingSystem">
+          <query>stats sum(TotalVisibleMemorySize00)</query>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="afterLabel">MB</option>
+        <option name="underLabel">Total Memory</option>
+        <option name="linkView">search</option>
+      </single>
+      <single>
+        <search base="baseLogicalDisk">
+          <query>stats sum(Size00) as Size | eval Size=round(Size/1024,2)</query>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="afterLabel">GB</option>
+        <option name="underLabel">Total Storage</option>
+        <option name="linkView">search</option>
+      </single>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Systems and Hardware</title>
+      <single>
+        <search base="baseComputerSystem">
+          <query>stats dc(ComputerName)</query>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="underLabel">Systems</option>
+        <option name="linkView">search</option>
+      </single>
+      <single>
+        <search base="baseComputerSystem">
+          <query>stats dc(Manufacturer00)</query>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="linkView">search</option>
+        <option name="underLabel">Hardware Manufacturers</option>
+      </single>
+      <single>
+        <search base="baseComputerSystem">
+          <query>stats dc(Model00)</query>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="underLabel">Unique Hardware Models</option>
+        <option name="linkView">search</option>
+      </single>
+      <single>
+        <search base="baseComputerSystem">
+          <query>stats dc(SystemType00)</query>
+        </search>
+        <option name="drilldown">none</option>
+        <option name="underLabel">Hardware Architectures</option>
+        <option name="linkView">search</option>
+      </single>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Manufacturer Overview</title>
       <chart>
-        <title>Computers by Manufacturer</title>
-        <searchString>index=sccm sourcetype="sccm-computersystem"  | dedup ComputerName Manufacturer00 | stats count by Manufacturer00</searchString>
-        <earliestTime>0</earliestTime>
-        <latestTime/>
+        <search base="baseComputerSystem">
+          <query>rename Manufacturer00 as Manufacturer | stats count by Manufacturer</query>
+        </search>
         <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
         <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
         <option name="charting.axisTitleX.visibility">visible</option>
@@ -26,45 +119,34 @@
         <option name="charting.layout.splitSeries">0</option>
         <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
         <option name="charting.legend.placement">right</option>
+        <option name="charting.chart.bubbleMaximumSize">50</option>
+        <option name="charting.chart.bubbleMinimumSize">10</option>
+        <option name="charting.chart.bubbleSizeBy">area</option>
       </chart>
-    </panel>
-    <panel>
       <table>
-        <title>Most Common Models</title>
-        <searchString>index=sccm sourcetype="sccm-computersystem" | dedup ComputerName Model00 | stats count by Model00 | sort -count</searchString>
-        <earliestTime>0</earliestTime>
-        <latestTime/>
+        <search base="baseComputerSystem">
+          <query>rename Manufacturer00 as Manufacturer, Model00 as Model | stats count by Manufacturer, Model</query>
+        </search>
         <option name="wrap">true</option>
         <option name="rowNumbers">false</option>
+        <option name="drilldown">cell</option>
         <option name="dataOverlayMode">none</option>
         <option name="count">10</option>
-        <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
-        <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
-        <option name="charting.axisTitleX.visibility">visible</option>
-        <option name="charting.axisTitleY.visibility">visible</option>
-        <option name="charting.axisTitleY2.visibility">visible</option>
-        <option name="charting.axisX.scale">linear</option>
-        <option name="charting.axisY.scale">linear</option>
-        <option name="charting.axisY2.enabled">false</option>
-        <option name="charting.axisY2.scale">inherit</option>
-        <option name="charting.chart">pie</option>
-        <option name="charting.chart.nullValueMode">gaps</option>
-        <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
-        <option name="charting.chart.stackMode">default</option>
-        <option name="charting.chart.style">shiny</option>
-        <option name="charting.drilldown">all</option>
-        <option name="charting.layout.splitSeries">0</option>
-        <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
-        <option name="charting.legend.placement">right</option>
-        <option name="drilldown">cell</option>
       </table>
     </panel>
     <panel>
+      <title>Storage Allocation Overview</title>
       <chart>
-        <title>Mobile vs Laptop</title>
-        <searchString>index=sccm sourcetype=sccm-cpuinfo | fillnull value="-" | dedup ComputerName IsMobile00| eval Mobile_Device=if(IsMobile00=="0","Computer","Laptop") |stats count by Mobile_Device</searchString>
-        <earliestTime>0</earliestTime>
-        <latestTime/>
+        <search base="baseLogicalDisk">
+          <query>fillnull value="-" | stats count by Description00 | rename Description00 as Drive_Type</query>
+        </search>
+        <option name="charting.chart">pie</option>
+        <option name="charting.axisY2.enabled">undefined</option>
+      </chart>
+      <table>
+        <search base="baseLogicalDisk">
+          <query>stats count as Drives, sum(Size00) as Total_Storage_GB by Description00 | rename Description00 as Drive_Type | eval Total_Storage_GB = round(Total_Storage_GB/1024,2) | fillnull value="-"</query>
+        </search>
         <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
         <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
         <option name="charting.axisTitleX.visibility">visible</option>
@@ -83,113 +165,75 @@
         <option name="charting.layout.splitSeries">0</option>
         <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
         <option name="charting.legend.placement">right</option>
+        <option name="charting.chart.bubbleMaximumSize">50</option>
+        <option name="charting.chart.bubbleMinimumSize">10</option>
+        <option name="charting.chart.bubbleSizeBy">area</option>
+        <option name="wrap">true</option>
+        <option name="rowNumbers">false</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="drilldown">cell</option>
+        <option name="count">10</option>
+      </table>
+    </panel>
+    <panel>
+      <title>CPU Architecture Overview</title>
+      <chart>
+        <search base="baseComputerSystem">
+          <query>stats sum(NumberOfProcessors00) as CPUs by SystemType00 | rename SystemType00 as System_Architecture</query>
+        </search>
+        <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
+        <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
+        <option name="charting.axisTitleX.visibility">visible</option>
+        <option name="charting.axisTitleY.visibility">visible</option>
+        <option name="charting.axisTitleY2.visibility">visible</option>
+        <option name="charting.axisX.scale">linear</option>
+        <option name="charting.axisY.scale">linear</option>
+        <option name="charting.axisY2.enabled">false</option>
+        <option name="charting.axisY2.scale">inherit</option>
+        <option name="charting.chart">pie</option>
+        <option name="charting.chart.nullValueMode">gaps</option>
+        <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
+        <option name="charting.chart.stackMode">default</option>
+        <option name="charting.chart.style">shiny</option>
+        <option name="charting.drilldown">all</option>
+        <option name="charting.layout.splitSeries">0</option>
+        <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
+        <option name="charting.legend.placement">right</option>
+        <option name="charting.chart.bubbleMaximumSize">50</option>
+        <option name="charting.chart.bubbleMinimumSize">10</option>
+        <option name="charting.chart.bubbleSizeBy">area</option>
       </chart>
+      <table>
+        <search base="baseComputerSystem">
+          <query>stats sum(NumberOfProcessors00) as CPUs by SystemType00 | rename SystemType00 as System_Architecture</query>
+        </search>
+        <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
+        <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
+        <option name="charting.axisTitleX.visibility">visible</option>
+        <option name="charting.axisTitleY.visibility">visible</option>
+        <option name="charting.axisTitleY2.visibility">visible</option>
+        <option name="charting.axisX.scale">linear</option>
+        <option name="charting.axisY.scale">linear</option>
+        <option name="charting.axisY2.enabled">false</option>
+        <option name="charting.axisY2.scale">inherit</option>
+        <option name="charting.chart">pie</option>
+        <option name="charting.chart.nullValueMode">gaps</option>
+        <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
+        <option name="charting.chart.stackMode">default</option>
+        <option name="charting.chart.style">shiny</option>
+        <option name="charting.drilldown">all</option>
+        <option name="charting.layout.splitSeries">0</option>
+        <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
+        <option name="charting.legend.placement">right</option>
+        <option name="charting.chart.bubbleMaximumSize">50</option>
+        <option name="charting.chart.bubbleMinimumSize">10</option>
+        <option name="charting.chart.bubbleSizeBy">area</option>
+        <option name="wrap">true</option>
+        <option name="rowNumbers">false</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="drilldown">cell</option>
+        <option name="count">10</option>
+      </table>
     </panel>
   </row>
-  <row>
-    <panel>
-      <chart>
-        <title>Number of Processors</title>
-        <searchString>index=sccm sourcetype="sccm-computersystem" | dedup ComputerName NumberOfProcessors00 |stats count by NumberOfProcessors00</searchString>
-        <earliestTime>0</earliestTime>
-        <latestTime/>
-        <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
-        <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
-        <option name="charting.axisTitleX.visibility">visible</option>
-        <option name="charting.axisTitleY.visibility">visible</option>
-        <option name="charting.axisTitleY2.visibility">visible</option>
-        <option name="charting.axisX.scale">linear</option>
-        <option name="charting.axisY.scale">linear</option>
-        <option name="charting.axisY2.enabled">false</option>
-        <option name="charting.axisY2.scale">inherit</option>
-        <option name="charting.chart">pie</option>
-        <option name="charting.chart.nullValueMode">gaps</option>
-        <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
-        <option name="charting.chart.stackMode">default</option>
-        <option name="charting.chart.style">shiny</option>
-        <option name="charting.drilldown">all</option>
-        <option name="charting.layout.splitSeries">0</option>
-        <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
-        <option name="charting.legend.placement">right</option>
-      </chart>
-    </panel>
-    <panel>
-      <chart>
-        <title>Computer Types</title>
-        <searchString>index=sccm sourcetype="sccm-computersystem"  |stats count by SystemType00</searchString>
-        <earliestTime>0</earliestTime>
-        <latestTime/>
-        <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
-        <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
-        <option name="charting.axisTitleX.visibility">visible</option>
-        <option name="charting.axisTitleY.visibility">visible</option>
-        <option name="charting.axisTitleY2.visibility">visible</option>
-        <option name="charting.axisX.scale">linear</option>
-        <option name="charting.axisY.scale">linear</option>
-        <option name="charting.axisY2.enabled">false</option>
-        <option name="charting.axisY2.scale">inherit</option>
-        <option name="charting.chart">pie</option>
-        <option name="charting.chart.nullValueMode">gaps</option>
-        <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
-        <option name="charting.chart.stackMode">default</option>
-        <option name="charting.chart.style">shiny</option>
-        <option name="charting.drilldown">all</option>
-        <option name="charting.layout.splitSeries">0</option>
-        <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
-        <option name="charting.legend.placement">right</option>
-      </chart>
-    </panel>
-    <panel>
-      <chart>
-        <title>Amount of Memory</title>
-        <searchString>index=sccm sourcetype=sccm-physical* | dedup ComputerName DeviceLocator00| fillnull value="-" | eventstats sum(Capacity00) as TotalMemory by ComputerName | stats count by TotalMemory</searchString>
-        <earliestTime>0</earliestTime>
-        <latestTime/>
-        <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
-        <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
-        <option name="charting.axisTitleX.visibility">visible</option>
-        <option name="charting.axisTitleY.visibility">visible</option>
-        <option name="charting.axisTitleY2.visibility">visible</option>
-        <option name="charting.axisX.scale">linear</option>
-        <option name="charting.axisY.scale">linear</option>
-        <option name="charting.axisY2.enabled">false</option>
-        <option name="charting.axisY2.scale">inherit</option>
-        <option name="charting.chart">pie</option>
-        <option name="charting.chart.nullValueMode">gaps</option>
-        <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
-        <option name="charting.chart.stackMode">default</option>
-        <option name="charting.chart.style">shiny</option>
-        <option name="charting.drilldown">all</option>
-        <option name="charting.layout.splitSeries">0</option>
-        <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
-        <option name="charting.legend.placement">right</option>
-      </chart>
-    </panel>
-    <panel>
-      <chart>
-        <title>Disk Drives Used</title>
-        <searchString>index=sccm sourcetype="sccm-logicaldisk" | fillnull value= "-" |dedup ComputerName Name00 Description00 | fillnull value="-" |stats count by Description00</searchString>
-        <earliestTime>0</earliestTime>
-        <latestTime/>
-        <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
-        <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
-        <option name="charting.axisTitleX.visibility">visible</option>
-        <option name="charting.axisTitleY.visibility">visible</option>
-        <option name="charting.axisTitleY2.visibility">visible</option>
-        <option name="charting.axisX.scale">linear</option>
-        <option name="charting.axisY.scale">linear</option>
-        <option name="charting.axisY2.enabled">false</option>
-        <option name="charting.axisY2.scale">inherit</option>
-        <option name="charting.chart">pie</option>
-        <option name="charting.chart.nullValueMode">gaps</option>
-        <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
-        <option name="charting.chart.stackMode">default</option>
-        <option name="charting.chart.style">shiny</option>
-        <option name="charting.drilldown">all</option>
-        <option name="charting.layout.splitSeries">0</option>
-        <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
-        <option name="charting.legend.placement">right</option>
-      </chart>
-    </panel>
-  </row>
-</dashboard>
+</form>

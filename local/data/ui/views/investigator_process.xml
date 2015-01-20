@@ -4,11 +4,10 @@
   <row>
     <panel>
       <table>
-        <title>Count of Installed Software on Computer where Less than 2 Instances Exist</title>
+        <title>Less than Two Instances of Installed Software</title>
         <search>
           <query>index=sccm  sourcetype="sccm-installedsoftware" | fillnull value="-" |dedup ComputerName ProductName00 |eventstats count(ProductName00) as Test values(ProductName00) as TestList values(Publisher00) as Publisher by ProductName00| eventstats count(Publisher00) as PublisherCount by Publisher00 | where Test &lt;=2 | where PublisherCount &lt;= 50 |stats sum(Test) list(TestList) list(Publisher) list(Test) list(PublisherCount) by ComputerName | sort -sum(Test)</query>
           <earliest>0</earliest>
-          <latest></latest>
         </search>
         <option name="wrap">true</option>
         <option name="rowNumbers">false</option>

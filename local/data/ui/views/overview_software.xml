@@ -1,7 +1,7 @@
 <form>
-  <label>Network Information Overview</label>
+  <label>Installed Software Overview</label>
   <fieldset submitButton="false" autoRun="true">
-    <input type="time" token="timeRange" searchWhenChanged="true">
+    <input type="time" token="timerange" searchWhenChanged="true">
       <label></label>
       <default>
         <earliest>-7d@h</earliest>
@@ -9,46 +9,48 @@
       </default>
     </input>
   </fieldset>
-  <search id="baseNetwork">
-    <query>index=sccm sourcetype=sccm-netcard | dedup ComputerName AdapterType00 ProductName00 ServiceName00 Manufacturer00 | stats count by ComputerName AdapterType00 ProductName00 ServiceName00 Manufacturer00 | rename *00 as *</query>
-    <earliest>$timeRange.earliest$</earliest>
-    <latest>$timeRange.latest$</latest>
+  <search id="baseSoftware">
+    <query>index=sccm  sourcetype="sccm-installedsoftware" | eval Version=VersionMajor00 + "." + VersionMinor00 | fillnull value="-" | table ComputerName ProductName00 Publisher00 Version | dedup ComputerName ProductName00 Publisher00 Version | rename ProductName00 as ProductName, Publisher00 as Publisher</query>
+    <earliest>$timerange.earliest$</earliest>
+    <latest>$timerange.latest$</latest>
   </search>
   <row>
     <panel>
       <single>
-        <search base="baseNetwork">
-          <query>stats dc(Manufacturer)</query>
+        <search base="baseSoftware">
+          <query>stats dc(Publisher)</query>
         </search>
         <option name="drilldown">none</option>
-        <option name="underLabel">NIC Manufacturers</option>
+        <option name="underLabel">Software Publishers</option>
         <option name="linkView">search</option>
       </single>
       <single>
-        <search base="baseNetwork">
-          <query>stats dc(AdapterType)</query>
+        <search base="baseSoftware">
+          <query>eval ProductPublisher=Publisher+"-"+ProductName | stats dc(ProductPublisher)</query>
         </search>
         <option name="drilldown">none</option>
-        <option name="underLabel">Adapter Types</option>
         <option name="linkView">search</option>
+        <option name="underLabel">Software Packages</option>
       </single>
       <single>
-        <search base="baseNetwork">
-          <query>stats sum(count)</query>
+        <search base="baseSoftware">
+          <query>eval ProdPubVer=ProductName+Publisher+Version | stats dc(ProdPubVer)</query>
         </search>
         <option name="drilldown">none</option>
-        <option name="underLabel">Unique MAC Addresses</option>
         <option name="linkView">search</option>
+        <option name="underLabel">Distinct Product Versions</option>
       </single>
     </panel>
   </row>
   <row>
     <panel>
-      <title>NIC Manufacturers</title>
+      <title>Software Packages by Publisher</title>
       <chart>
-        <search base="baseNetwork">
-          <query>stats sum(count) as count by Manufacturer</query>
+        <search base="baseSoftware">
+          <query>stats count by Publisher</query>
         </search>
+        <option name="charting.chart">pie</option>
+        <option name="charting.axisY2.enabled">false</option>
         <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
         <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
         <option name="charting.axisTitleX.visibility">visible</option>
@@ -56,9 +58,7 @@
         <option name="charting.axisTitleY2.visibility">visible</option>
         <option name="charting.axisX.scale">linear</option>
         <option name="charting.axisY.scale">linear</option>
-        <option name="charting.axisY2.enabled">false</option>
         <option name="charting.axisY2.scale">inherit</option>
-        <option name="charting.chart">pie</option>
         <option name="charting.chart.bubbleMaximumSize">50</option>
         <option name="charting.chart.bubbleMinimumSize">10</option>
         <option name="charting.chart.bubbleSizeBy">area</option>
@@ -72,20 +72,24 @@
         <option name="charting.legend.placement">right</option>
       </chart>
       <table>
-        <search base="baseNetwork">
-          <query>stats sum(count) as count by Manufacturer</query>
+        <search base="baseSoftware">
+          <query>stats count by Publisher</query>
         </search>
         <option name="wrap">undefined</option>
         <option name="rowNumbers">undefined</option>
-        <option name="drilldown">row</option>
+        <option name="drilldown">none</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="count">10</option>
       </table>
     </panel>
     <panel>
-      <title>Adapter Types</title>
+      <title>Software Deployment Overview</title>
       <chart>
-        <search base="baseNetwork">
-          <query>stats sum(count) as count by AdapterType</query>
+        <search base="baseSoftware">
+          <query>eval Product=Publisher + ": " + ProductName | stats count by Product</query>
         </search>
+        <option name="charting.chart">pie</option>
+        <option name="charting.axisY2.enabled">undefined</option>
         <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
         <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
         <option name="charting.axisTitleX.visibility">visible</option>
@@ -93,9 +97,7 @@
         <option name="charting.axisTitleY2.visibility">visible</option>
         <option name="charting.axisX.scale">linear</option>
         <option name="charting.axisY.scale">linear</option>
-        <option name="charting.axisY2.enabled">false</option>
         <option name="charting.axisY2.scale">inherit</option>
-        <option name="charting.chart">pie</option>
         <option name="charting.chart.bubbleMaximumSize">50</option>
         <option name="charting.chart.bubbleMinimumSize">10</option>
         <option name="charting.chart.bubbleSizeBy">area</option>
@@ -109,21 +111,23 @@
         <option name="charting.legend.placement">right</option>
       </chart>
       <table>
-        <search base="baseNetwork">
-          <query>stats sum(count) as count by AdapterType</query>
+        <search base="baseSoftware">
+          <query>stats count as Installations, values(Version) as Installed_Versions by Publisher, ProductName</query>
         </search>
-        <option name="wrap">undefined</option>
-        <option name="rowNumbers">undefined</option>
-        <option name="drilldown">row</option>
+        <option name="wrap">true</option>
+        <option name="rowNumbers">false</option>
+        <option name="drilldown">cell</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="count">10</option>
       </table>
     </panel>
   </row>
   <row>
     <panel>
-      <title>Network Adapters</title>
+      <title>All Software Deployments</title>
       <table>
-        <search base="baseNetwork">
-          <query>stats sum(count) as count by Manufacturer ProductName AdapterType</query>
+        <search base="baseSoftware">
+          <query></query>
         </search>
         <option name="wrap">true</option>
         <option name="rowNumbers">false</option>

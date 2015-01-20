@@ -10,6 +10,8 @@ The Splunk App for SCCM enhances a basic SCCM app provided by Splunk by:
 * adding support for monitoring of SCCM's internal log files
 * providing dashboards for select SCCM logs, including detailed views for internal query performance.
 * adjusting colors and images to closer align with Microsoft's SCCM branding
+* modifying or rewriting dashboards to better represent an overhead view of the envirionment
+* utilizing search post-processing to improve dashboard search performance
 
 # Requirements
 

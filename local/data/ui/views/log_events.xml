@@ -1,13 +1,22 @@
-<dashboard script="custom_layout_width.js">
+<form script="custom_layout_width.js">
   <label>Logging Events</label>
+  <fieldset submitButton="false" autoRun="true">
+    <input type="time" token="timeRange" searchWhenChanged="true">
+      <label></label>
+      <default>
+        <earliest>-7d@h</earliest>
+        <latest>now</latest>
+      </default>
+    </input>
+  </fieldset>
   <row>
     <panel>
       <title>Log Volume</title>
       <chart>
         <search>
           <query>index=sccm sourcetype=sccm_log_raw | timechart span=1h count by source_log</query>
-          <earliest>-24h@h</earliest>
-          <latest>now</latest>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
         </search>
         <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
         <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
@@ -39,8 +48,8 @@
         <title>Scheduler Events</title>
         <search>
           <query>index=sccm sourcetype=sccm_log_raw source_log=schedule | top event</query>
-          <earliest>-24h@h</earliest>
-          <latest>now</latest>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
         </search>
         <option name="wrap">true</option>
         <option name="rowNumbers">false</option>
@@ -54,10 +63,15 @@
         <title>StatMgr Events</title>
         <search>
           <query>index=sccm sourcetype=sccm_log_raw source_log=statmgr | top event</query>
-          <earliest>-24h@h</earliest>
-          <latest>now</latest>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
         </search>
+        <option name="wrap">true</option>
+        <option name="rowNumbers">false</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="drilldown">cell</option>
+        <option name="count">10</option>
       </table>
     </panel>
   </row>
-</dashboard>
+</form>

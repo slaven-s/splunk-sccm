@@ -1,14 +1,23 @@
-<dashboard>
+<form>
   <label>Database Query Log</label>
   <description>Database query statements extracted from the SMSProv log within SCCM. These query statements can be useful for discovering tables and schema relationships within the SCCM table for use in further developing new dashboards or creating other custom integrations. A history of run query transactions is also provided to assist with monitoring slow or long-running queries that may impact system performance.</description>
+  <fieldset submitButton="false" autoRun="true">
+    <input type="time" token="timeRange" searchWhenChanged="true">
+      <label></label>
+      <default>
+        <earliest>-7d@h</earliest>
+        <latest>now</latest>
+      </default>
+    </input>
+  </fieldset>
   <row>
     <panel>
       <title>Query Volume</title>
       <chart>
         <search>
           <query>index=sccm sourcetype=sccm_log_raw source_log=SMSProv query_text=* query_event=COMPLETE | timechart span=15m count</query>
-          <earliest>-24h@h</earliest>
-          <latest>now</latest>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
         </search>
         <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
         <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
@@ -41,8 +50,8 @@
         <title>Query Performance / Slow Queries</title>
         <search>
           <query>index=sccm sourcetype=sccm_log_raw source_log=SMSProv query_text=* query_event=* | transaction startswith="query_event=START" endswith="query_event=COMPLETE" query_text thread | stats count, avg(duration) as Avg_Time, max(duration) as Max_Time, sum(duration) as Total_Time by query_text | sort -Avg_Time</query>
-          <earliest>-24h@h</earliest>
-          <latest>now</latest>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
         </search>
         <option name="wrap">true</option>
         <option name="rowNumbers">false</option>
@@ -58,10 +67,15 @@
         <title>Most Queried Tables (Does not include JOINs)</title>
         <search>
           <query>index=sccm sourcetype=sccm_log_raw source_log=SMSProv query_text=* query_event=COMPLETE | rex field=query_text "FROM (?P&lt;query_table&gt;[^ ]+)" | top query_table</query>
-          <earliest>-24h@h</earliest>
-          <latest>now</latest>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
         </search>
+        <option name="wrap">true</option>
+        <option name="rowNumbers">false</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="drilldown">cell</option>
+        <option name="count">10</option>
       </table>
     </panel>
   </row>
-</dashboard>
+</form>

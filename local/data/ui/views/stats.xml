@@ -1,17 +1,25 @@
-<dashboard>
+<form>
   <label>Monitoring Statistics</label>
   <description></description>
+  <fieldset submitButton="false" autoRun="true">
+    <input type="time" token="timeRange" searchWhenChanged="true">
+      <label></label>
+      <default>
+        <earliest>-7d@h</earliest>
+        <latest>now</latest>
+      </default>
+    </input>
+  </fieldset>
   <row>
     <panel>
       <single>
         <title>Number of Events</title>
         <search>
           <query>index=sccm sourcetype=sccm* | stats count</query>
-          <earliest>0</earliest>
-          <latest>now</latest>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
         </search>
         <option name="drilldown">none</option>
-        <option name="afterLabel">Events over last 24 Hours</option>
         <option name="linkView">search</option>
       </single>
     </panel>
@@ -22,8 +30,8 @@
         <title>Number of Events by Sourcetype</title>
         <search>
           <query>index=sccm sourcetype=sccm* | stats count by sourcetype | sort -count</query>
-          <earliest>0</earliest>
-          <latest>now</latest>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
         </search>
         <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
         <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
@@ -55,8 +63,8 @@
         <title>Number of Events by Sourcetype</title>
         <search>
           <query>index=sccm sourcetype=sccm* | timechart count by sourcetype</query>
-          <earliest>-24h@h</earliest>
-          <latest>now</latest>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
         </search>
         <option name="charting.chart">area</option>
         <option name="charting.axisY2.enabled">undefined</option>
@@ -82,4 +90,4 @@
       </chart>
     </panel>
   </row>
-</dashboard>
+</form>

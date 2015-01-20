@@ -1,17 +1,27 @@
 <form>
   <label>Service Investigator</label>
-  <description/>
-  <fieldset submitButton="true">
+  <description></description>
+  <fieldset submitButton="true" autoRun="false">
+    <input type="time" token="timeRange">
+      <label>Duration</label>
+      <default>
+        <earliest>-7d@h</earliest>
+        <latest>now</latest>
+      </default>
+    </input>
     <input type="text" token="computername">
-      <label>Computer Name</label>
+      <label>ComputerName</label>
+      <default>*</default>
     </input>
   </fieldset>
   <row>
     <panel>
       <table>
-        <searchString>index=sccm  sourcetype="sccm-services" ComputerName=$computername$ |  dedup ComputerName DisplayName00 | table DisplayName00 Name00 PathName00 ServiceType00 StartMode00 StartName00 State00 | sort DisplayName00</searchString>
-        <earliestTime>0</earliestTime>
-        <latestTime/>
+        <search>
+          <query>index=sccm  sourcetype="sccm-services" ComputerName=$computername$ |  dedup ComputerName DisplayName00 | table DisplayName00 Name00 PathName00 ServiceType00 StartMode00 StartName00 State00 | sort DisplayName00</query>
+          <earliest>$timeRange.earliest$</earliest>
+          <latest>$timeRange.latest$</latest>
+        </search>
         <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
         <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
         <option name="charting.axisTitleX.visibility">visible</option>

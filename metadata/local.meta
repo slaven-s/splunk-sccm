@@ -105,7 +105,7 @@ modtime = 1416107787.365729000
 
 [nav/default]
 version = 6.2.1
-modtime = 1421666734.870254000
+modtime = 1421693271.040175000
 
 [views/cert]
 owner = admin
@@ -178,7 +178,7 @@ access = read : [ * ], write : [ admin, power ]
 export = none
 owner = nobody
 version = 6.2.1
-modtime = 1421285923.991883000
+modtime = 1421702004.396714000
 
 [props/sccm-cpuinfo/LOOKUP-machineidtocomputername]
 access = read : [ * ], write : [ admin, power ]
@@ -217,7 +217,7 @@ modtime = 1421666006.734661000
 [views/log_dbqueries]
 owner = admin
 version = 6.2.1
-modtime = 1421667652.373583000
+modtime = 1421692444.772253000
 
 [props/sccm_log_raw/EXTRACT-query_event]
 export = none
@@ -227,4 +227,49 @@ modtime = 1421666122.622738000
 
 [views/sccm]
 version = 6.2.1
-modtime = 1421667359.502605000
+modtime = 1421716258.434543000
+
+[views/overview_network]
+version = 6.2.1
+modtime = 1421712025.995801000
+
+[views/overview_os]
+version = 6.2.1
+modtime = 1421701320.218847000
+
+[views/investigator_network]
+version = 6.2.1
+modtime = 1421694531.842239000
+
+[views/investigator_software]
+version = 6.2.1
+modtime = 1421702368.349563000
+
+[views/overview_software]
+owner = admin
+version = 6.2.1
+modtime = 1421694006.736866000
+
+[views/overview_hardware]
+version = 6.2.1
+modtime = 1421694323.677143000
+
+[views/investigator_os]
+version = 6.2.1
+modtime = 1421698797.512108000
+
+[views/investigator_process]
+version = 6.2.1
+modtime = 1421691667.169572000
+
+[views/investigator_service]
+version = 6.2.1
+modtime = 1421692090.180164000
+
+[views/log_events]
+version = 6.2.1
+modtime = 1421692595.754648000
+
+[views/stats]
+version = 6.2.1
+modtime = 1421693130.213985000

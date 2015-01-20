@@ -1,15 +1,15 @@
 <nav search_view="search" color="#002050">
   <view name="sccm" default="true" />
 
-  <collection label="Config Overview">
+  <collection label="Configuration Overview">
     <view source="unclassified" match="overview" />
   </collection>
   
-  <collection label="Config Details">
+  <collection label="Configuration Details">
     <view source="unclassified" match="investigator" />
   </collection>
   
-  <collection label="SCCM Logs">
+  <collection label="Log Analysis">
     <view source="unclassified" match="log" />
   </collection>
   
