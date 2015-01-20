@@ -13,7 +13,7 @@ The Splunk App for SCCM includes overview dashboards for:
 * Operating System - Number of unique OS versions, builds, releases, and installation dates.
 * Software - Number of software vendors, number of packages provided by each vendor, and product versions.
 
-More detailed dashboards are alos provided for each of the above categories, allowing an administrator to
+More detailed dashboards are also provided for each of the above categories, allowing an administrator to
 see information specific to a particular server within the app.
 
 Dashboards for monitoring SCCM's internal logs provide an additional insight into the health and performance
@@ -28,11 +28,11 @@ from, allowing for accurate license cost prediction.
 * Automatic detection of installed packages allows for auditing and detection of unauthorized software
 installations across the environment.
 * The Hardware Overview dashboard can be used to communicate the size and scale of an enterprise's
-Windows Server footprint in terms of CPU, Memory, and Disk space.
+Windows Server footprint in terms of CPU, Memory, and Disk Space.
 * The Service Investigator can be used to identify Services running on specific servers or auditing
 RunAs users for services (ex: company policy says non-Microsoft services cannot run as LocalSystem).
 * Using the Database Query Log, an administrator can identify problematic, repated, or slow queries
-being run against the SCCM database. The same log is also useful for helping an administraor discover
+being run against the SCCM database. The same log is also useful for helping an administrator discover
 relationships between tables and views within the SCCM database, which is often lacking in documentation.
 For more information on this use case, see the **Database Query Log** section below.
 
@@ -55,7 +55,7 @@ queries run against the database. Info about the queries includes:
 * Number of times the query was run (count)
 * Average run time for the query (Avg_Time)
 * Maximum run time for the query (Max_Time)
-* Total Time spent running the query over the total number of runs. (Total_Time, expressed as the calculation of: duration * count)
+* Total Time spent running the query over the total number of runs (Total_Time, expressed as the calculation of: duration * count)
 
 
 
@@ -109,14 +109,14 @@ index = sccm
 
 # Closing Notes & License Information
 
-This applicaiton was created by Rich Acosta and Erica Feldman as an entry
+This application was created by Rich Acosta and Erica Feldman as an entry
 for the Splunk Apptitude contest. A sample application, `sccm.spl` was provided
 to contestants as part of the [contest resources](http://splunk.challengepost.com/details/resources).
 
 This application began as an improvement on top of the provided sample application, improving
-on data integreity, correctness, performance, asthetics, and grammar throughout the application.
+on data integrity, correctness, performance, aesthetics, and grammar throughout the application.
 
-As the application was developed, most components of the original sample app were rewritten
+As the application was developed, many components of the original sample app were rewritten
 or completely replaced.
 
 Where applicable, the modifications to this app by Rich Acosta and
