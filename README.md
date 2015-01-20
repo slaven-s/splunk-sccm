@@ -132,6 +132,8 @@ is used to further enrich fields within events. Lookups are no longer used "on t
 * Searches have either been rewritten to `dedup` on the proper combination of fields, or rewritten using the appropriate `stats`
 commands to ensure each record is accounted for at its correct point in time.
 * An additional use case of monitoring SCCM Logs has been integrated into the application.
+* Application components have been properly packaged, as per the Splunk recommendations. No `local.meta` file is included,
+and all resources reside under the `default/` app directory.
 
 # License Information
 Where applicable, the modifications to this app by Rich Acosta and
