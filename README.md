@@ -144,3 +144,5 @@ and all resources reside under the `default/` app directory.
 Where applicable, the modifications to this app by Rich Acosta and
 Erica Feldman are licensed under the MIT License. See `LICENSE` for full details.
 
+## Books
+- [Learn ConfigMgr 2012 in a Month of Lunches](http://manning.com/bannan/) by James C. Bannan (Manning Publications). [Chapter 1](http://manning.com/bannan/LearnConfigMgr_ch1.pdf)
